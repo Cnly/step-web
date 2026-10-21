@@ -1,0 +1,27 @@
+node_modules/
+/dist/
+/coverage/
+/result
+/result-*
+
+# Runtime configuration belongs to the deployment, not the source repository.
+/config.json
+config.local.json
+config.*.local.json
+.env
+.env.*
+!.env.example
+
+# Generated identities, certificates, and private keys.
+*.p12
+*.pfx
+*.key
+*.pem
+*.crt
+*.cer
+*.csr
+*.der
+*.mobileconfig
+
+*.log
+.DS_Store

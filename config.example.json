@@ -1,0 +1,9 @@
+{
+  "issuer": "https://sso.example.com",
+  "clientId": "oauth-client-id",
+  "redirectUri": "https://step-web.example.org/",
+  "caSignUrl": "https://step-ca.example.org/1.0/sign",
+  "scope": "openid email",
+  "certificateDuration": "24h",
+  "oidcExtraOrigins": []
+}

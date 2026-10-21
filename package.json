@@ -1,0 +1,23 @@
+{
+  "name": "step-web",
+  "version": "0.1.0",
+  "description": "Static OIDC enrollment page for step-ca certificates",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test test/*.test.js",
+    "test:apple": "node scripts/test-apple.js",
+    "serve": "node scripts/serve.js"
+  },
+  "dependencies": {
+    "asn1js": "3.0.10",
+    "oidc-client-ts": "3.5.0",
+    "pkijs": "3.4.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}
