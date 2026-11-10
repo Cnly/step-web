@@ -43,10 +43,10 @@ export async function enroll(config, session, dependencies = {}) {
     ...dependencies,
   };
 
-  const defaultPassword = generatePassword();
+  const generatedPassword = generatePassword();
   let copied = false;
   try {
-    await deps.copy(defaultPassword);
+    await deps.copy(generatedPassword);
     copied = true;
   } catch {
     // Some browsers require a page click before allowing clipboard writes.
@@ -56,12 +56,14 @@ export async function enroll(config, session, dependencies = {}) {
     (copied
       ? 'Your certificate password has been copied to your clipboard. '
       : 'Copy this password for your certificate! ') +
-    "You'll need it to import your certificate in a minute, then you can delete them.\n\n" +
-    'If you change it, you need to remember the new password. ' +
-    'Note that some devices (e.g., iPhone) may refuse to import certificates with no password.',
-    defaultPassword
+    "You'll need it to import your certificate in a minute, then you can delete them.",
+    generatedPassword
   );
   if (password === null) return false;
+  if (password !== generatedPassword)
+    throw new EnrollmentError(
+      'The generated password cannot be changed. Reload this page to start again.'
+    );
 
   const name = session.email || session.subject;
   if (!session.idToken || typeof name !== 'string' || !name || name.length > 256)

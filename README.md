@@ -2,10 +2,11 @@
 
 A static, dialog-only step-ca enrollment page. A fresh visit loads the runtime
 configuration and redirects to OIDC login. After the callback, a native prompt
-displays an editable generated password. OK creates a P-256 key in the browser,
-submits a CSR to step-ca, and downloads
+displays a generated password to copy. OK with the unchanged password creates a
+P-256 key in the browser, submits a CSR to step-ca, and downloads
 `<portal-hostname>-YYYY-MM-DD.p12`, using the device's local date at download time.
-Cancel stops before key generation or certificate issuance.
+Cancelling or changing the password stops before key generation or certificate
+issuance.
 
 Key generation and PKCS#12 export run in the browser. The signing request contains
 only the CSR, ID token, and requested certificate lifetime. The portal is static;
@@ -202,15 +203,15 @@ counts are 100,000. It contains the leaf and returned chain, with matching
 `localKeyId` attributes for the leaf and private key. SHA-1 is used only to
 derive this public linking identifier, not for encryption, signatures, or MAC.
 
-The default password has 16 random letters and digits (about 95 bits of
+The generated password has 16 random letters and digits (about 95 bits of
 randomness). The page tries to copy it to the clipboard before showing the
 prompt and tells you whether it succeeded. Safari generally blocks this
 automatic copy because it requires a page click; copy the password manually
-when prompted. You may replace it with any password, including an empty one.
-If you edit it, copy the new value yourself before continuing.
+when prompted. Enrollment requires the generated password exactly as shown.
 
-The Apple probe covers nonempty ASCII and Unicode passwords. Empty passwords are
-covered by the OpenSSL tests only; use a nonempty password for Apple imports.
+The Apple probe tests the exporter with nonempty ASCII and Unicode passwords.
+Empty passwords are covered by the OpenSSL tests only; the enrollment page always
+uses its generated password.
 
 The browser bundle targets Safari 18 syntax. Native import of the chosen PKCS#12
 algorithms requires macOS 15+ or iOS/iPadOS 18+; see Apple's notes on

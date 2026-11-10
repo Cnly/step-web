@@ -107,13 +107,22 @@ test('clipboard failures do not stop enrollment', async () => {
   }
 });
 
-test('uses the edited password without changing it', async () => {
-  for (const password of ['My passphrase 123!', '']) {
-    const { calls, deps } = harness({ prompt: () => password });
+test('changed passwords stop before key generation or certificate issuance', async () => {
+  for (const edit of [
+    () => 'My passphrase 123!',
+    () => '',
+    password => ` ${password}`,
+    password => `${password} `,
+    password => `${password[0] === 'A' ? 'B' : 'A'}${password.slice(1)}`,
+  ]) {
+    const { calls, deps } = harness({ prompt: (_message, password) => edit(password) });
 
-    assert.equal(await enroll(config, session, deps), true);
+    await assert.rejects(enroll(config, session, deps), EnrollmentError);
 
-    assert.equal(calls.bundles[0].password, password);
+    assert.equal(calls.keys, 0);
+    assert.equal(calls.requests.length, 0);
+    assert.equal(calls.bundles.length, 0);
+    assert.equal(calls.downloads.length, 0);
   }
 });
 
